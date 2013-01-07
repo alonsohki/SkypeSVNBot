@@ -52,9 +52,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_svnbot_OBJECTS = iniparser.$(OBJEXT) main.$(OBJEXT)
+am_svnbot_OBJECTS = svnbot-iniparser.$(OBJEXT) svnbot-main.$(OBJEXT) \
+	svnbot-skype.$(OBJEXT)
 svnbot_OBJECTS = $(am_svnbot_OBJECTS)
 svnbot_LDADD = $(LDADD)
+svnbot_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CXXLD) $(svnbot_CXXFLAGS) $(CXXFLAGS) \
+	$(svnbot_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -205,7 +209,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-svnbot_SOURCES = iniparser.cpp main.cpp
+svnbot_SOURCES = iniparser.cpp main.cpp skype.cpp
+svnbot_CXXFLAGS = `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-glib-1` -std=gnu++0x
+svnbot_LDFLAGS = `pkg-config --libs glib-2.0` `pkg-config --libs dbus-glib-1`
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -305,7 +311,7 @@ clean-binPROGRAMS:
 	rm -f $$list
 svnbot$(EXEEXT): $(svnbot_OBJECTS) $(svnbot_DEPENDENCIES) $(EXTRA_svnbot_DEPENDENCIES) 
 	@rm -f svnbot$(EXEEXT)
-	$(CXXLINK) $(svnbot_OBJECTS) $(svnbot_LDADD) $(LIBS)
+	$(svnbot_LINK) $(svnbot_OBJECTS) $(svnbot_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -313,8 +319,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iniparser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svnbot-iniparser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svnbot-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svnbot-skype.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -336,6 +343,48 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+svnbot-iniparser.o: iniparser.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-iniparser.o -MD -MP -MF $(DEPDIR)/svnbot-iniparser.Tpo -c -o svnbot-iniparser.o `test -f 'iniparser.cpp' || echo '$(srcdir)/'`iniparser.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-iniparser.Tpo $(DEPDIR)/svnbot-iniparser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iniparser.cpp' object='svnbot-iniparser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-iniparser.o `test -f 'iniparser.cpp' || echo '$(srcdir)/'`iniparser.cpp
+
+svnbot-iniparser.obj: iniparser.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-iniparser.obj -MD -MP -MF $(DEPDIR)/svnbot-iniparser.Tpo -c -o svnbot-iniparser.obj `if test -f 'iniparser.cpp'; then $(CYGPATH_W) 'iniparser.cpp'; else $(CYGPATH_W) '$(srcdir)/iniparser.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-iniparser.Tpo $(DEPDIR)/svnbot-iniparser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iniparser.cpp' object='svnbot-iniparser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-iniparser.obj `if test -f 'iniparser.cpp'; then $(CYGPATH_W) 'iniparser.cpp'; else $(CYGPATH_W) '$(srcdir)/iniparser.cpp'; fi`
+
+svnbot-main.o: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-main.o -MD -MP -MF $(DEPDIR)/svnbot-main.Tpo -c -o svnbot-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-main.Tpo $(DEPDIR)/svnbot-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='svnbot-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+
+svnbot-main.obj: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-main.obj -MD -MP -MF $(DEPDIR)/svnbot-main.Tpo -c -o svnbot-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-main.Tpo $(DEPDIR)/svnbot-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='svnbot-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+
+svnbot-skype.o: skype.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-skype.o -MD -MP -MF $(DEPDIR)/svnbot-skype.Tpo -c -o svnbot-skype.o `test -f 'skype.cpp' || echo '$(srcdir)/'`skype.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-skype.Tpo $(DEPDIR)/svnbot-skype.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='skype.cpp' object='svnbot-skype.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-skype.o `test -f 'skype.cpp' || echo '$(srcdir)/'`skype.cpp
+
+svnbot-skype.obj: skype.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -MT svnbot-skype.obj -MD -MP -MF $(DEPDIR)/svnbot-skype.Tpo -c -o svnbot-skype.obj `if test -f 'skype.cpp'; then $(CYGPATH_W) 'skype.cpp'; else $(CYGPATH_W) '$(srcdir)/skype.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/svnbot-skype.Tpo $(DEPDIR)/svnbot-skype.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='skype.cpp' object='svnbot-skype.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(svnbot_CXXFLAGS) $(CXXFLAGS) -c -o svnbot-skype.obj `if test -f 'skype.cpp'; then $(CYGPATH_W) 'skype.cpp'; else $(CYGPATH_W) '$(srcdir)/skype.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

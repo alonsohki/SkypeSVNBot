@@ -11,3 +11,16 @@
 *.lai
 *.la
 *.a
+
+
+.deps/
+Makefile
+autom4te.cache/
+config.h
+config.h.in~
+config.log
+config.status
+libtool
+stamp-h1
+svnbot
+

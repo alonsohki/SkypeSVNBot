@@ -1,12 +1,16 @@
 #include <cstdio>
 #include <cstdlib>
-#include "iniparser.h"
+#include "configuration.h"
 #include "skype.h"
 #include "svn.h"
 
 int main ( int argc, const char* argv[] )
 {
-    SkypeConnector connector ( "CPPsvnLogger" );
+    Configuration config ( "svnbot.conf" );
+    if ( config.isOk () )
+    {
+        SkypeConnector connector ( config.getSkypeName().c_str() );
+    }
     return EXIT_SUCCESS;
 }
 

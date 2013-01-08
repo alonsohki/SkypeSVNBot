@@ -23,4 +23,4 @@ config.status
 libtool
 stamp-h1
 svnbot
-
+svnbot.conf

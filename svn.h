@@ -5,6 +5,7 @@
 class SVN
 {
 public:
+            SVN             () {}
             SVN             ( const std::string& repoURL );
             ~SVN            ();
 

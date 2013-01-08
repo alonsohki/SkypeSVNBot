@@ -6,7 +6,16 @@ Configuration::Configuration ( const char* file )
 : mOk ( false )
 {
     Rsl::File::Ini::IniParser parser ( file );
-    const char* val = parser.GetValue ( "skype", "instance_name" );
+    const char* val = parser.GetValue ( "svn", "poll_interval" );
+    if ( val )
+        mPollInterval = atoi(val);
+    else
+    {
+        fprintf ( stderr, "Configuration error: No SVN poll interval found\n" );
+        return;
+    }
+
+    val = parser.GetValue ( "skype", "instance_name" );
     if ( val )
         mSkypeName = val;
     else

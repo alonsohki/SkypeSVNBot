@@ -28,14 +28,14 @@ void SkypeConnector::send ( const char* format, ... )
 {
     DBusMessageIter iter;
     va_list vl;
-    char buffer [ 1024 ];
+    char buffer [ 8192 * 4 ];
     const char* str = &buffer[0];
 
     va_start ( vl, format );
     vsnprintf ( buffer, sizeof(buffer), format, vl );
     va_end ( vl );
 
-    puts(buffer);
+//    printf ( ">> Skype: %s\n", buffer );
 
     DBusMessage *message = dbus_message_new_method_call(
         "com.Skype.API",

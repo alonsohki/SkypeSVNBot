@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <string>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 static void __passthru ( const char* cmd, std::string* output )
@@ -34,6 +36,9 @@ static void __passthru ( const char* cmd, std::string* output )
         buffer[n] = '\0';
         output->append ( buffer );
     }
+
+    close ( pipefd[0] );
+    waitpid ( child, 0, 0 );
 }
 
 static void passthru ( const std::string& str, std::string* output )
